@@ -6,39 +6,84 @@ module Cupcakinator
 
 
     def self.included(other)
-      other.extend ClassMethods
+      raise "deprecated: don't include Cupcakinator::Base directly"
+      #puts "included (via Base) in #{other}"
+      #other.extend ClassMethods
     end
 
 
     def self.extend_object(other)
-      other.class_variable_set '@@cupcakinator_options', nil
-      other.class_variable_set '@@cupcakinator_config', nil
+      class_eval <<-ENDOFCLASSDEF
+        class << self
+          @cupcakinator_options = nil;
+          @cupcakinator_config = nil;
+        end
+      ENDOFCLASSDEF
       super
     end
 
 
+    # this is the main access point to using and setting up cupcakinator
+    # it accepts any arguments, the following are currently recognized:
+    # @param [Array<Hash>] options
+    # @option options.last [Hash] :dir The directory where the file can be found
+    # @option options.last [Hash] :file The configuration filename
+    # @option options.last [Hash] :method The method used to access the configuration options
+    # @example  Default usage - Foo will load ./config/config.yml into a method named 'config'
+    #   class Foo
+    #     include cupcakinator
+    #     cupcakinate
+    #   end
+    #   >> puts Foo.config
+    #   { :foo => 'bar' }
+    #
+    # @example  method name change - Foo will load ./config/config.yml into a method named 'le_config'
+    #   class Foo
+    #     include cupcakinator
+    #     cupcakinate method: 'le_config'
+    #   end
+    #   >> puts Foo.le_config
+    #   { :foo => 'bar' }
+    #   >> puts Foo.new.le_config
+    #   { :foo => 'bar' }
+    #
+    # @example  with Rails - Foo will load config/foo_config.yml relative to Rails root into a method named 'config'
+    #   class Foo
+    #     include cupcakinator
+    #     cupcakinate dir: Rails.root.join('config'), file: 'foo_config.yml'
+    #   end
+    #   >> puts Foo.config
+    #   { :foo => 'bar' }
+    #   >> puts Foo.new.config
+    #   { :foo => 'bar' }
+    #
     def cupcakinate(*options)
       if !options.empty?
         default_options = _cupcakinator_options
-        class_variable_set('@@cupcakinator_options', default_options.merge(options.last))
+        @cupcakinator_options = default_options.merge(options.last)
       end
     end
 
 
     def _cupcakinator_options
-      if class_variable_get('@@cupcakinator_options').nil?
-        class_variable_set '@@cupcakinator_options', Cupcakinator::Options.new
+      if @cupcakinator_options.nil?
+        @cupcakinator_options = Cupcakinator::Options.new
       end
-      class_variable_get('@@cupcakinator_options')
+      @cupcakinator_options
     end
 
 
     def _cupcakinator_config
-      if class_variable_get('@@cupcakinator_config').nil?
-        yaml_config = YAML.load_file(File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file]))
-        class_variable_set('@@cupcakinator_config', Cupcakinator::Config.new(yaml_config))
+      if @cupcakinator_config.nil?
+        filename = File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file])
+        yaml_config = YAML.load_file(filename)
+        @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
       end
-      class_variable_get('@@cupcakinator_config')
+      @cupcakinator_config
+    rescue Errno::ENOENT
+      raise Cupcakinator::ConfigFileNotFoundError.new("Can't find Cupcakinator configured config file #{filename}\nCupcakinator options:\n#{_cupcakinator_options}")
+    rescue Psych::SyntaxError => e
+      raise Cupcakinator::ConfigFileInvalidError.new("Cupcakinator configure config file #{filename} invalid\nOriginal error: #{e.message}")
     end
 
 

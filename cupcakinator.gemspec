@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rb-readline'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency "yard"
+  gem.add_development_dependency "redcarpet"
 
 
 

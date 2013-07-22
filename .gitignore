@@ -9,6 +9,8 @@ InstalledFiles
 _yardoc
 coverage
 doc/
+bin/
+foo.rb
 lib/bundler/man
 pkg
 rdoc
@@ -16,3 +18,5 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+config.yml
+bar_config.yml
