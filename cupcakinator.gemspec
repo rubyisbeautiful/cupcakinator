@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.name          = "cupcakinator"
   gem.require_paths = ["lib"]
   gem.version       = Cupcakinator::VERSION
+  gem.license       = 'MIT'
 
   gem.add_runtime_dependency 'hashie'
 
