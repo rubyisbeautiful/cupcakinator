@@ -17,6 +17,8 @@ Gem::Specification.new do |gem|
   gem.version       = Cupcakinator::VERSION
   gem.license       = 'MIT'
 
+  gem.license       = "MIT"
+
   gem.add_runtime_dependency 'hashie'
 
   gem.add_development_dependency "bundler", "~> 1.3"
