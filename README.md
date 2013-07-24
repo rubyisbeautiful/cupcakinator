@@ -1,7 +1,37 @@
-# Cupcakinator
+# cupcakinator [![Build Status](https://travis-ci.org/rubyisbeautiful/cupcakinator.png)](https://travis-ci.org/rubyisbeautiful/cupcakinator)
 
-TODO: Write a gem description
+## Description
 
+cupcakinator provides a simple way to use the 'config' pattern in any class.  For example, given class Foo:
+
+	class Foo
+		include Cupcakinator
+		
+		cupcakinate
+	end
+
+and the file ./config/config.yml:
+	
+	---
+	bacon:
+		flavor: pork
+	meatball:
+		flavor:
+			- pork
+			- chicken
+You can do:
+	
+	>> Foo.config.bacon.flavor
+	'pork'
+	>> Foo.config.meatball.flavor
+	['pork','chicken']
+	>> Foo.new.config.bacon.flavor
+	'pork'
+
+etc..
+Options include dir, file, and method.  	
+
+ 
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -18,7 +48,8 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+include Cupcakinator
+call 'cupcakinator' in your class with dir, file, and method options
 
 ## Contributing
 
