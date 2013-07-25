@@ -61,6 +61,32 @@ describe Cupcakinator::Base do
       CupcakinatorBaseSpecFoo._cupcakinator_config.bacon.class.should eq(Cupcakinator::Config)
     end
 
+    it 'should raise ConfigFileNotFoundError if config file is not found', :wip => true do
+      YAML.should_receive(:load_file).and_raise(Errno::ENOENT)
+
+      class CupcakinatorBaseSpecNoExist
+        include Cupcakinator
+
+        cupcakinate file: 'no_exist.yml'
+      end
+
+      expect{ CupcakinatorBaseSpecNoExist._cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
+    end
+
+    it 'should raise ConfigFileInvalidError if config file is not found', :wip => true do
+      dummy = double.as_null_object
+      YAML.should_receive(:load_file).and_raise(Psych::SyntaxError.new(dummy,dummy,dummy,dummy,dummy,dummy))
+
+      class CupcakinatorBaseSpecBadFile
+        include Cupcakinator
+
+        cupcakinate
+      end
+
+
+      expect{ CupcakinatorBaseSpecBadFile._cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileInvalidError)
+    end
+
   end
 
 
