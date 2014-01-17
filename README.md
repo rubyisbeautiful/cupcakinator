@@ -1,4 +1,4 @@
-# cupcakinator [![Build Status](https://travis-ci.org/rubyisbeautiful/cupcakinator.png)](https://travis-ci.org/rubyisbeautiful/cupcakinator)
+# cupcakinator [![Build Status](https://travis-ci.org/rubyisbeautiful/cupcakinator.png)](https://travis-ci.org/rubyisbeautiful/cupcakinator) [![Code Climate](https://codeclimate.com/github/rubyisbeautiful/cupcakinator.png)](https://codeclimate.com/github/rubyisbeautiful/cupcakinator)
 
 ## Description
 
