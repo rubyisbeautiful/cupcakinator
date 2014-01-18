@@ -17,20 +17,5 @@ Gem::Specification.new do |gem|
   gem.version       = Cupcakinator::VERSION
   gem.license       = 'MIT'
 
-  gem.add_runtime_dependency 'hashie'
-
-  gem.add_development_dependency "bundler", "~> 1.3"
-  gem.add_development_dependency "debugger"
-  gem.add_development_dependency "guard"
-  gem.add_development_dependency "guard-rspec"
-  gem.add_development_dependency "guard-spork"
-  gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'rb-readline'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency "yard"
-  gem.add_development_dependency "redcarpet"
-
-
-
 
 end

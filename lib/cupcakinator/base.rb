@@ -6,9 +6,7 @@ module Cupcakinator
 
 
     def self.included(other)
-      raise "deprecated: don't include Cupcakinator::Base directly"
-      #puts "included (via Base) in #{other}"
-      #other.extend ClassMethods
+      raise I18n.t('error.deprecation.include_base')
     end
 
 
@@ -75,15 +73,20 @@ module Cupcakinator
 
     def _cupcakinator_config
       if @cupcakinator_config.nil?
-        filename = File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file])
-        yaml_config = YAML.load_file(filename)
-        @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
+        load_cupcakinator_config
       end
       @cupcakinator_config
+    end
+
+
+    def load_cupcakinator_config
+      filename = File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file])
+      yaml_config = YAML.load_file(filename)
+      @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
     rescue Errno::ENOENT
-      raise Cupcakinator::ConfigFileNotFoundError.new("Can't find Cupcakinator configured config file #{filename}\nCupcakinator options:\n#{_cupcakinator_options}")
+      raise Cupcakinator::ConfigFileNotFoundError.new(filename, _cupcakinator_options)
     rescue Psych::SyntaxError => e
-      raise Cupcakinator::ConfigFileInvalidError.new("Cupcakinator configure config file #{filename} invalid\nOriginal error: #{e.message}")
+      raise Cupcakinator::ConfigFileInvalidError.new(filename, e.message)
     end
 
 

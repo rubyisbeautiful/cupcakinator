@@ -30,7 +30,7 @@ describe Cupcakinator::Base do
     end
 
 
-    it "should call _cupcakinator_options" do
+    it 'should call _cupcakinator_options' do
       @klass.should_receive(:_cupcakinator_options).at_least(1).and_return({})
 
       @klass.cupcakinate method: 'config'
@@ -61,30 +61,40 @@ describe Cupcakinator::Base do
       CupcakinatorBaseSpecFoo._cupcakinator_config.bacon.class.should eq(Cupcakinator::Config)
     end
 
-    it 'should raise ConfigFileNotFoundError if config file is not found' do
-      YAML.should_receive(:load_file).and_raise(Errno::ENOENT)
+    it 'should not load more than once' do
+      h = double
+      CupcakinatorBaseSpecFoo.instance_variable_set('@cupcakinator_config', h)
+      CupcakinatorBaseSpecFoo._cupcakinator_config.should == h
+      CupcakinatorBaseSpecFoo.should_not_receive(:load_cupcakinator_config)
+    end
 
+  end
+
+
+  describe 'load_cupcakinator_config' do
+    it 'should raise ConfigFileNotFoundError if config file is not found' do
       class CupcakinatorBaseSpecNoExist
         include Cupcakinator
 
         cupcakinate file: 'no_exist.yml'
       end
+      YAML.stub(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
+      YAML.stub(:load_file).with(anything).and_call_original
 
-      expect{ CupcakinatorBaseSpecNoExist._cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
+      expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
     end
 
     it 'should raise ConfigFileInvalidError if config file is not found' do
       dummy = double.as_null_object
-      YAML.should_receive(:load_file).and_raise(Psych::SyntaxError.new(dummy,dummy,dummy,dummy,dummy,dummy))
 
       class CupcakinatorBaseSpecBadFile
         include Cupcakinator
 
-        cupcakinate
+        cupcakinate file: 'bad_file.yml'
       end
+      YAML.stub(:load_file).with('./bad_file.yml').and_raise(Psych::SyntaxError.new(dummy,dummy,dummy,dummy,dummy,dummy))
 
-
-      expect{ CupcakinatorBaseSpecBadFile._cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileInvalidError)
+      expect{ CupcakinatorBaseSpecBadFile.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileInvalidError)
     end
 
   end
@@ -99,7 +109,7 @@ describe Cupcakinator::Base do
     end
 
     it 'should not raise if NoMethodError when using the configured cupcakinator method' do
-      expect { subject.el_config }.to_not raise_error(NoMethodError)
+      expect { subject.el_config }.not_to raise_error
     end
 
     it 'should delegeate to _cupcakinator_config when using the configured cupcakinator method' do
@@ -124,7 +134,7 @@ describe Cupcakinator::Base do
       end
 
       it 'should not raise if NoMethodError when using the configured cupcakinator method' do
-        expect { subject.el_config }.to_not raise_error(NoMethodError)
+        expect { subject.el_config }.not_to raise_error
       end
 
       it 'should delegeate to _cupcakinator_config when using the configured cupcakinator method' do
