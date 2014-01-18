@@ -99,7 +99,7 @@ describe Cupcakinator::Base do
     end
 
     it 'should not raise if NoMethodError when using the configured cupcakinator method' do
-      expect { subject.el_config }.to_not raise_error(NoMethodError)
+      expect { subject.el_config }.not_to raise_error
     end
 
     it 'should delegeate to _cupcakinator_config when using the configured cupcakinator method' do
@@ -124,7 +124,7 @@ describe Cupcakinator::Base do
       end
 
       it 'should not raise if NoMethodError when using the configured cupcakinator method' do
-        expect { subject.el_config }.to_not raise_error(NoMethodError)
+        expect { subject.el_config }.not_to raise_error
       end
 
       it 'should delegeate to _cupcakinator_config when using the configured cupcakinator method' do

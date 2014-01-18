@@ -1,3 +1,4 @@
+require 'i18n'
 require 'cupcakinator/version'
 require 'cupcakinator/base'
 require 'cupcakinator/config'
@@ -21,9 +22,14 @@ require 'cupcakinator/errors'
 #   {"flavor"=>["chicken", "pork"]}
 module Cupcakinator
 
+  unless @_i18n_initialized_for_cupcakinator
+    locale_file = File.expand_path(File.join(File.dirname(__FILE__), '../config/locales.yml'))
+    I18n.load_path << locale_file
+    @_i18n_initialized_for_cupcakinator = true
+  end
+
   def self.included(other)
     other.extend Cupcakinator::Base
   end
-
 
 end
