@@ -12,7 +12,7 @@ module Cupcakinator
   class ConfigFileInvalidError < StandardError
 
     def initialize(filename, message)
-      I18n.t('error.config_invalid', filename: filename, message: e.message)
+      I18n.t('error.config_invalid', filename: filename, message: message)
     end
 
   end

@@ -73,11 +73,16 @@ module Cupcakinator
 
     def _cupcakinator_config
       if @cupcakinator_config.nil?
-        filename = File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file])
-        yaml_config = YAML.load_file(filename)
-        @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
+        load_cupcakinator_config
       end
       @cupcakinator_config
+    end
+
+
+    def load_cupcakinator_config
+      filename = File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file])
+      yaml_config = YAML.load_file(filename)
+      @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
     rescue Errno::ENOENT
       raise Cupcakinator::ConfigFileNotFoundError.new(filename, _cupcakinator_options)
     rescue Psych::SyntaxError => e

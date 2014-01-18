@@ -1,6 +1,9 @@
 require 'rubygems'
 require 'spork'
 
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'cupcakinator'
+
 Spork.prefork do
   require 'simplecov'
   SimpleCov.start do
@@ -8,9 +11,6 @@ Spork.prefork do
   end
 
   require 'rspec'
-
-  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-  require 'cupcakinator'
 end
 
 Spork.each_run do
