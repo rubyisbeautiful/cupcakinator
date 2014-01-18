@@ -2,5 +2,11 @@ en:
   error:
     deprecation:
       include_base: "deprecated: don't include Cupcakinator::Base directly"
-    config_not_found: "Can't find Cupcakinator configured config file %{filename}\nCupcakinator options:\n%{options}"
-    config_invalid: "Cupcakinator configure config file %{filename} invalid\nOriginal error: %{message}"
+    config_not_found: "Can't find Cupcakinator configured config file '%{filename}'\nCupcakinator options:\n%{options}"
+    config_invalid: "Cupcakinator configure config file '%{filename}' invalid\nOriginal error: %{message}"
+es:
+  error:
+    deprecation:
+      include_base: 'desaprobado: no incluya directamente Cupcakinator::Base'
+    config_not_found: "No se encuentra el archivo de config Cupcakinator '%{filename}'\nopciones de Cupcakinator: \n%{options}"
+    config_invalid: "el archivo de config Cupcakinator '%{filename}' es invalido\nError original: %{message}"
