@@ -17,5 +17,6 @@ Gem::Specification.new do |gem|
   gem.version       = Cupcakinator::VERSION
   gem.license       = 'MIT'
 
+  gem.add_dependency 'hashie', '>= 2.0.0'
 
 end
