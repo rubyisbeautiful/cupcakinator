@@ -97,6 +97,19 @@ describe Cupcakinator::Base do
       expect{ CupcakinatorBaseSpecBadFile.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileInvalidError)
     end
 
+    it 'should load the YAML anchored at root_key' do
+      class CupcakinatorBaseSpecRootKey
+        include Cupcakinator
+
+        cupcakinate file: 'config.yml', root_key: 'meatball'
+      end
+
+      subject = CupcakinatorBaseSpecRootKey.new
+      subject.config.has_key?(:meatball).should be_false
+      subject.config.has_key?(:flavor).should be_false
+    end
+
+
   end
 
 

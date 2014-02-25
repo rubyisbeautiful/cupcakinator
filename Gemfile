@@ -10,12 +10,15 @@ gem 'json', '~> 1.8'
 group :development, :test do
   gem 'debugger'
   gem 'guard'
+  gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'rake'
-  gem 'rb-readline'
   gem 'redcarpet'
+  gem 'yard'
+end
+
+group :development, :test, :ci do
+  gem 'rake'
   gem 'rspec'
   gem 'simplecov', require: false
-  gem 'yard'
 end
