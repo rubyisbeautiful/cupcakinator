@@ -101,12 +101,12 @@ describe Cupcakinator::Base do
       class CupcakinatorBaseSpecRootKey
         include Cupcakinator
 
-        cupcakinate dir: File.expand_path(File.join(File.dirname(__FILE__), '../..')), file: 'config.yml', root_key: 'meatball'
+        cupcakinate dir: File.expand_path(File.join(File.dirname(__FILE__), '..')), file: 'el_config.yml', root_key: 'special'
       end
 
       subject = CupcakinatorBaseSpecRootKey.new
-      subject.config.has_key?(:meatball).should be_false
-      subject.config.has_key?(:flavor).should be_false
+      subject.config.has_key?(:special).should be_false
+      subject.config.bacon.chunky.should be_false
     end
 
 
