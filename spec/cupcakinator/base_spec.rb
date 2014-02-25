@@ -97,6 +97,19 @@ describe Cupcakinator::Base do
       expect{ CupcakinatorBaseSpecBadFile.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileInvalidError)
     end
 
+    it 'should load the YAML anchored at root_key' do
+      class CupcakinatorBaseSpecRootKey
+        include Cupcakinator
+
+        cupcakinate dir: File.expand_path(File.join(File.dirname(__FILE__), '..')), file: 'el_config.yml', root_key: 'special'
+      end
+
+      subject = CupcakinatorBaseSpecRootKey.new
+      subject.config.has_key?(:special).should be_false
+      subject.config.bacon.chunky.should be_false
+    end
+
+
   end
 
 

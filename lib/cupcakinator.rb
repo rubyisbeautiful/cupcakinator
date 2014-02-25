@@ -24,6 +24,7 @@ module Cupcakinator
 
   unless @_i18n_initialized_for_cupcakinator
     locale_file = File.expand_path(File.join(File.dirname(__FILE__), '../config/locales.yml'))
+    I18n.enforce_available_locales = false
     I18n.load_path << locale_file
     @_i18n_initialized_for_cupcakinator = true
   end
