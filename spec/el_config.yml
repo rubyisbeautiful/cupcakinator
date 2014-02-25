@@ -1,2 +1,5 @@
 bacon:
   chunky: true
+special:
+  bacon:
+    chunky: false

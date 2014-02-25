@@ -11,6 +11,7 @@ end
 guard 'spork', :test_unit => false do
   watch('Gemfile')
   watch('Gemfile.lock')
+  watch('lib/cupcakinator.rb')
   watch('spec/spec_helper.rb') { :rspec }
 end
 

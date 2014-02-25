@@ -27,6 +27,7 @@ module Cupcakinator
     # @option options.last [Hash] :dir The directory where the file can be found
     # @option options.last [Hash] :file The configuration filename
     # @option options.last [Hash] :method The method used to access the configuration options
+    # @option options.last [Hash] :root_key A key in the top level of the config file that will become the base
     # @example  Default usage - Foo will load ./config/config.yml into a method named 'config'
     #   class Foo
     #     include cupcakinator
@@ -49,6 +50,17 @@ module Cupcakinator
     #   class Foo
     #     include cupcakinator
     #     cupcakinate dir: Rails.root.join('config'), file: 'foo_config.yml'
+    #   end
+    #   >> puts Foo.config
+    #   { :foo => 'bar' }
+    #   >> puts Foo.new.config
+    #   { :foo => 'bar' }
+    #
+    # @example  with Rails - Foo will load config/foo_config.yml relative to Rails root into a method named 'config'
+    #           beginning at the root_key based on the Rails.env
+    #   class Foo
+    #     include cupcakinator
+    #     cupcakinate dir: Rails.root.join('config'), file: 'foo_config.yml', root_key: Rails.env
     #   end
     #   >> puts Foo.config
     #   { :foo => 'bar' }
@@ -82,7 +94,12 @@ module Cupcakinator
     def load_cupcakinator_config
       filename = File.join(_cupcakinator_options[:dir], _cupcakinator_options[:file])
       yaml_config = YAML.load_file(filename)
-      @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
+      if _cupcakinator_options.has_key?(:root_key)
+        rk = _cupcakinator_options[:root_key]
+        @cupcakinator_config = Cupcakinator::Config.new(yaml_config[rk])
+      else
+        @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
+      end
     rescue Errno::ENOENT
       raise Cupcakinator::ConfigFileNotFoundError.new(filename, _cupcakinator_options)
     rescue Psych::SyntaxError => e
