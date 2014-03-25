@@ -84,6 +84,18 @@ describe Cupcakinator::Base do
       expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
     end
 
+    it 'should raise ConfigFileNotFoundError if config file is not found and allow_missing is true' do
+      class CupcakinatorBaseSpecNoExist
+        include Cupcakinator
+
+        cupcakinate file: 'no_exist.yml', allow_missing: false
+      end
+      YAML.stub(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
+      YAML.stub(:load_file).with(anything).and_call_original
+
+      expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
+    end
+
     it 'should not raise ConfigFileNotFoundError if config file is not found and allow_missing is true' do
       class CupcakinatorBaseSpecNoExist
         include Cupcakinator

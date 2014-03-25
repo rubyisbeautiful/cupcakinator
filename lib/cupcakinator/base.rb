@@ -29,7 +29,7 @@ module Cupcakinator
     # @option options.last [Hash] :method The method used to access the configuration options
     # @option options.last [Hash] :root_key A key in the top level of the config file that will become the base
     # @option options.last [Hash] :allow_missing Allows the config file to be missing, config will return empty Hash
-    # @example  Default usage - Foo will load ./config/config.yml into a method named 'config'
+    # @example  Default usage - Foo will load ./config/config.yml into a method named 'config' and raise on missing
     #   class Foo
     #     include cupcakinator
     #     cupcakinate
@@ -111,7 +111,7 @@ module Cupcakinator
         @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
       end
     rescue Errno::ENOENT
-      if _cupcakinator_options.has_key?(:allow_missing)
+      if (_cupcakinator_options.allow_missing rescue false)
         @cupcakinator_config = Cupcakinator::Config.new({})
       else
         raise Cupcakinator::ConfigFileNotFoundError.new(filename, _cupcakinator_options)
