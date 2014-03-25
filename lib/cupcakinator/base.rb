@@ -28,6 +28,7 @@ module Cupcakinator
     # @option options.last [Hash] :file The configuration filename
     # @option options.last [Hash] :method The method used to access the configuration options
     # @option options.last [Hash] :root_key A key in the top level of the config file that will become the base
+    # @option options.last [Hash] :allow_missing Allows the config file to be missing, config will return empty Hash
     # @example  Default usage - Foo will load ./config/config.yml into a method named 'config'
     #   class Foo
     #     include cupcakinator
@@ -67,6 +68,15 @@ module Cupcakinator
     #   >> puts Foo.new.config
     #   { :foo => 'bar' }
     #
+    # @example with no config file
+    #
+    #   class Foo
+    #     include cupcakinator
+    #     cupcakinate dir: Rails.root.join('config'), file: 'foo_config.yml', allow_missing: true
+    #   end
+    #   >> puts Foo.config
+    #   {}
+    #
     def cupcakinate(*options)
       if !options.empty?
         default_options = _cupcakinator_options
@@ -101,7 +111,11 @@ module Cupcakinator
         @cupcakinator_config = Cupcakinator::Config.new(yaml_config)
       end
     rescue Errno::ENOENT
-      raise Cupcakinator::ConfigFileNotFoundError.new(filename, _cupcakinator_options)
+      if _cupcakinator_options.has_key?(:allow_missing)
+        @cupcakinator_config = Cupcakinator::Config.new({})
+      else
+        raise Cupcakinator::ConfigFileNotFoundError.new(filename, _cupcakinator_options)
+      end
     rescue Psych::SyntaxError => e
       raise Cupcakinator::ConfigFileInvalidError.new(filename, e.message)
     end

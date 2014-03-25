@@ -7,6 +7,8 @@ module Cupcakinator
   # method
   # dir
   # file
+  # root_key
+  # allow_missing
   class Config < Hash
     include Hashie::Extensions::MethodAccess
     include Hashie::Extensions::Coercion
@@ -19,6 +21,9 @@ module Cupcakinator
         self[k] = v
       end
     end
+
+
+    # TODO: to_h that returns uncoerced hash
 
   end
 
