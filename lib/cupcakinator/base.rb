@@ -6,7 +6,7 @@ module Cupcakinator
 
 
     def self.included(other)
-      raise I18n.t('error.deprecation.include_base')
+      raise I18n.t('cupcakinator.error.deprecation.include_base')
     end
 
 
