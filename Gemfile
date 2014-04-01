@@ -8,7 +8,6 @@ gem 'i18n'
 gem 'json', '~> 1.8'
 
 group :development, :test do
-  gem 'debugger'
   gem 'guard'
   gem 'guard-bundler'
   gem 'guard-rspec'

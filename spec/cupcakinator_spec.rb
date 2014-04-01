@@ -44,7 +44,7 @@ describe Cupcakinator do
   context 'localization' do
 
     it 'should have loaded the locales file' do
-      I18n.t('error.deprecation.include_base').should =~ /don't include Cupcakinator::Base directly/
+      I18n.t('cupcakinator.error.deprecation.include_base').should =~ /don't include Cupcakinator::Base directly/
     end
   end
 

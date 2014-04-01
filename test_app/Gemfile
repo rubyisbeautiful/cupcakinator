@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gem 'rails', '~> 4.0.4'
+gem 'rspec-rails'
+gem 'sqlite3'
+
+gem 'cupcakinator', path: '..'
