@@ -1,6 +1,3 @@
-require 'hashie/extensions/method_access'
-require 'hashie/extensions/coercion'
-
 module Cupcakinator
 
   # known configuration variables

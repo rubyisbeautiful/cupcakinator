@@ -20,7 +20,7 @@ describe Cupcakinator::Base do
     before :each do
       sleep(1)
       @klass = nil
-      t = Time.now.strftime("Foo%Y%m%d%H%M%s")
+      t = Time.now.strftime('Foo%Y%m%d%H%M%s')
       eval <<-ENDOFKLASS
         class #{t}
           include Cupcakinator
@@ -31,7 +31,7 @@ describe Cupcakinator::Base do
 
 
     it 'should call _cupcakinator_options' do
-      @klass.should_receive(:_cupcakinator_options).at_least(1).and_return({})
+      expect(@klass).to receive(:_cupcakinator_options).at_least(1).and_return({})
 
       @klass.cupcakinate method: 'config'
     end
@@ -39,13 +39,13 @@ describe Cupcakinator::Base do
     it 'should set the default config with no options' do
       @klass.cupcakinate
 
-      @klass._cupcakinator_options.should eq Cupcakinator::Options.new
+      expect(@klass._cupcakinator_options).to eq Cupcakinator::Options.new
     end
 
     it 'should merge options into default' do
       @klass.cupcakinate file: 'conf.yml'
 
-      @klass._cupcakinator_options[:file].should == 'conf.yml'
+      expect(@klass._cupcakinator_options[:file]).to eq 'conf.yml'
     end
 
   end
@@ -54,18 +54,18 @@ describe Cupcakinator::Base do
   describe '_cupcakinator_config' do
 
     it 'should return a Cupcakinator::Config' do
-      CupcakinatorBaseSpecFoo._cupcakinator_config.class.should eq(Cupcakinator::Config)
+      expect(CupcakinatorBaseSpecFoo._cupcakinator_config.class).to eq(Cupcakinator::Config)
     end
 
     it 'should return a Cupcakinator::Config for an embedded Hash (in yaml)' do
-      CupcakinatorBaseSpecFoo._cupcakinator_config.bacon.class.should eq(Cupcakinator::Config)
+      expect(CupcakinatorBaseSpecFoo._cupcakinator_config.bacon.class).to eq(Cupcakinator::Config)
     end
 
     it 'should not load more than once' do
       h = double
       CupcakinatorBaseSpecFoo.instance_variable_set('@cupcakinator_config', h)
-      CupcakinatorBaseSpecFoo._cupcakinator_config.should == h
-      CupcakinatorBaseSpecFoo.should_not_receive(:load_cupcakinator_config)
+      expect(CupcakinatorBaseSpecFoo._cupcakinator_config).to eq h
+      expect(CupcakinatorBaseSpecFoo).not_to receive(:load_cupcakinator_config)
     end
 
   end
@@ -78,8 +78,8 @@ describe Cupcakinator::Base do
 
         cupcakinate file: 'no_exist.yml'
       end
-      YAML.stub(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
-      YAML.stub(:load_file).with(anything).and_call_original
+      allow(YAML).to receive(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
+      allow(YAML).to receive(:load_file).with(anything).and_call_original
 
       expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
     end
@@ -90,8 +90,8 @@ describe Cupcakinator::Base do
 
         cupcakinate file: 'no_exist.yml', allow_missing: false
       end
-      YAML.stub(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
-      YAML.stub(:load_file).with(anything).and_call_original
+      allow(YAML).to receive(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
+      allow(YAML).to receive(:load_file).with(anything).and_call_original
 
       expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileNotFoundError)
     end
@@ -102,10 +102,10 @@ describe Cupcakinator::Base do
 
         cupcakinate file: 'no_exist.yml', allow_missing: true
       end
-      YAML.stub(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
-      YAML.stub(:load_file).with(anything).and_call_original
+      allow(YAML).to receive(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
+      allow(YAML).to receive(:load_file).with(anything).and_call_original
 
-      expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.to_not raise_error(Cupcakinator::ConfigFileNotFoundError)
+      expect{ CupcakinatorBaseSpecNoExist.load_cupcakinator_config }.not_to raise_error
     end
 
     it 'should return empty Config if config file is not found and allow_missing is true' do
@@ -114,8 +114,8 @@ describe Cupcakinator::Base do
 
         cupcakinate file: 'no_exist.yml', allow_missing: true
       end
-      YAML.stub(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
-      YAML.stub(:load_file).with(anything).and_call_original
+      allow(YAML).to receive(:load_file).with('./no_exist.yml').and_raise(Errno::ENOENT)
+      allow(YAML).to receive(:load_file).with(anything).and_call_original
 
       expect(CupcakinatorBaseSpecNoExist.config.to_h).to eq({})
     end
@@ -128,7 +128,7 @@ describe Cupcakinator::Base do
 
         cupcakinate file: 'bad_file.yml'
       end
-      YAML.stub(:load_file).with('./bad_file.yml').and_raise(Psych::SyntaxError.new(dummy,dummy,dummy,dummy,dummy,dummy))
+      allow(YAML).to receive(:load_file).with('./bad_file.yml').and_raise(Psych::SyntaxError.new(dummy,dummy,dummy,dummy,dummy,dummy))
 
       expect{ CupcakinatorBaseSpecBadFile.load_cupcakinator_config }.to raise_error(Cupcakinator::ConfigFileInvalidError)
     end
@@ -141,8 +141,8 @@ describe Cupcakinator::Base do
       end
 
       subject = CupcakinatorBaseSpecRootKey.new
-      subject.config.has_key?(:special).should be_false
-      subject.config.bacon.chunky.should be_false
+      expect(subject.config.has_key?(:special)).to be false
+      expect(subject.config.bacon.chunky).to be false
     end
 
 
@@ -162,7 +162,7 @@ describe Cupcakinator::Base do
     end
 
     it 'should delegeate to _cupcakinator_config when using the configured cupcakinator method' do
-      CupcakinatorBaseSpecFoo.should_receive(:_cupcakinator_config).with('john')
+      expect(CupcakinatorBaseSpecFoo).to receive(:_cupcakinator_config).with('john')
 
       subject.el_config('john')
     end
@@ -187,7 +187,7 @@ describe Cupcakinator::Base do
       end
 
       it 'should delegeate to _cupcakinator_config when using the configured cupcakinator method' do
-        CupcakinatorBaseSpecFoo.should_receive(:_cupcakinator_config).with('john')
+        expect(CupcakinatorBaseSpecFoo).to receive(:_cupcakinator_config).with('john')
 
         subject.el_config('john')
       end

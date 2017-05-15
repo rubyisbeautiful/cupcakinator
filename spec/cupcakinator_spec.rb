@@ -22,11 +22,11 @@ describe Cupcakinator do
   context 'inheritence' do
 
     it "parent should not have child's options" do
-      CupcakinatorSpecFoo._cupcakinator_options[:method].should == 'config'
+      expect(CupcakinatorSpecFoo._cupcakinator_options[:method]).to eq 'config'
     end
 
     it "child should not have parent's options" do
-      CupcakinatorSpecBar._cupcakinator_options[:method].should == 'bar_config'
+      expect(CupcakinatorSpecBar._cupcakinator_options[:method]).to eq 'bar_config'
     end
 
   end
@@ -35,7 +35,7 @@ describe Cupcakinator do
   context 'multiple uses' do
 
     it "should exist separately per invocation" do
-      CupcakinatorSpecBaz._cupcakinator_options[:method].should_not eq CupcakinatorSpecFoo._cupcakinator_options[:method]
+      expect(CupcakinatorSpecBaz._cupcakinator_options[:method]).not_to eq CupcakinatorSpecFoo._cupcakinator_options[:method]
     end
 
   end
@@ -44,7 +44,7 @@ describe Cupcakinator do
   context 'localization' do
 
     it 'should have loaded the locales file' do
-      I18n.t('cupcakinator.error.deprecation.include_base').should =~ /don't include Cupcakinator::Base directly/
+      expect(I18n.t('cupcakinator.error.deprecation.include_base')).to match /don't include Cupcakinator::Base directly/
     end
   end
 
