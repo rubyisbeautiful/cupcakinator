@@ -1,4 +1,5 @@
 require 'i18n'
+require 'hashie'
 require 'cupcakinator/version'
 require 'cupcakinator/base'
 require 'cupcakinator/config'
